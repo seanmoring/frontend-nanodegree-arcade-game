@@ -80,7 +80,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -95,6 +95,21 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update();
+    }
+
+    /* This is called by the update function and loops through all of the 
+     * objects in the enemies array, checking with the player object to see
+     * if there has been a collision. If there has been a collision, then 
+     * the init function is called to reset the game
+     */
+    function checkCollisions() {
+        for (enemy in allEnemies) {
+            if (player.collideWithEnemy(allEnemies[enemy]) == true) {
+                reset();
+                break; 
+            }
+        }        
+    //allEnemies.forEach(player.collideWithEnemy(enemy));
     }
 
     /* This function initially draws the "game level", it will then call
@@ -149,6 +164,7 @@ var Engine = (function(global) {
          * the render function you have defined.
          */
         allEnemies.forEach(function(enemy) {
+            console.log("drawing an enemy");
             enemy.render();
         });
 
@@ -167,6 +183,7 @@ var Engine = (function(global) {
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
      */
+    console.log("before loading images");
     Resources.load([
         'images/stone-block.png',
         'images/water-block.png',
