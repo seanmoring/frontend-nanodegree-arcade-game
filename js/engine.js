@@ -173,10 +173,18 @@ var Engine = (function(global) {
 
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
+     * those sorts of things. It's called once by the init() method, which has no effect
+     * because it the reset state of each object is identical to its initial state
+     * but this function is also called when a collision is detected and then it
+     * sets the state of each object back to its initial state, effectively resetting the
+     * game. 
      */
     function reset() {
-        // noop
+        
+        for (enemy in allEnemies) {
+            allEnemies[enemy].reset();
+        }
+        player.reset(); 
     }
 
     /* Go ahead and load all of the images we know we're going to need to
