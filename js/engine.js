@@ -99,17 +99,19 @@ var Engine = (function(global) {
 
     /* This is called by the update function and loops through all of the 
      * objects in the enemies array, checking with the player object to see
-     * if there has been a collision. If there has been a collision, then 
+     * if there has been a collision. If there has been a collision, then
      * the init function is called to reset the game
      */
     function checkCollisions() {
-        for (enemy in allEnemies) {
-            if (player.collideWithEnemy(allEnemies[enemy]) == true) {
+        allEnemies.forEach(function(enemy) {
+            if (player.collideWithEnemy(enemy) == true) {
                 reset();
-                break; 
             }
-        }        
-    //allEnemies.forEach(player.collideWithEnemy(enemy));
+        });
+
+        allGems.forEach(function(gem) {
+            player.pickupGem(gem);
+        });
     }
 
     /* This function initially draws the "game level", it will then call
@@ -164,8 +166,11 @@ var Engine = (function(global) {
          * the render function you have defined.
          */
         allEnemies.forEach(function(enemy) {
-            console.log("drawing an enemy");
             enemy.render();
+        });
+
+        allGems.forEach(function(gem) {
+            gem.render();
         });
 
         player.render();
@@ -177,14 +182,19 @@ var Engine = (function(global) {
      * because it the reset state of each object is identical to its initial state
      * but this function is also called when a collision is detected and then it
      * sets the state of each object back to its initial state, effectively resetting the
-     * game. 
+     * game.
      */
     function reset() {
         
         for (enemy in allEnemies) {
             allEnemies[enemy].reset();
         }
-        player.reset(); 
+
+        for (gem in allGems) {
+            allGems[gem].reset();
+        }
+
+        player.reset();
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -197,7 +207,10 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Gem Green.png',
+        'images/Gem Blue.png',
+        'images/Gem Orange.png'
     ]);
     Resources.onReady(init);
 
